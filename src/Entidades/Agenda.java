@@ -17,6 +17,8 @@ public class Agenda {
 	
 	public void addContact()
 	{
+		Message.title("Agregar Contactos"); 
+		
 		if (_contacts.size() < _maximunContact)
 		{
 			Contacto contact = new Contacto();
@@ -41,36 +43,34 @@ public class Agenda {
 			
 			_contacts.add(contact);
 			
-			System.out.println("************************************************");
-			System.out.println("**El contacto hacido añadido satifactoriamente**");
-			System.out.println("************************************************\n\n");
+			Message.success("El contacto hacido añadido satifactoriamente");
+			
 		}
 		else
 		{
-			System.out.println("Alert: Sele informa que su agenda ha llegado a máximo de contactos "+"("+_maximunContact+")");
+			Message.warning("Alert: Se le informa que su agenda ha llegado al máximo de contactos "+"("+_maximunContact+")");
 		}
 		
 	}
 	
 	public void showAllContacts()
 	{
-		System.out.println("Cantidad de contactos " + "(" + _contacts.size() + ")");
+		Message.title("Todos los contactos"); 
+		System.out.println("(" + _contacts.size() + ")contactos");
 		if(_contacts.size() != 0)
 		{
 			tripContacto(_contacts);
-			
 		}
 		else
 		{
-			System.out.println("*******************************************************************");
-			System.out.println("**En esta apartado apareceran los contactos que usted ha agregado**");
-			System.out.println("*******************************************************************\n\n");
-			
+			Message.success("En esta apartado apareceran los contactos que usted agregado");
 		}
 	}
 	
 	public void searchContactForNombre()
 	{
+		Message.title("Buscar contactos por nombre"); 
+		
 		System.out.println("Ingrese el nombre del contacto que desea buscar:");
 		String name = signInDataString();
 		ArrayList<Contacto> contactsFound = new ArrayList<Contacto>();
@@ -83,19 +83,23 @@ public class Agenda {
 			}
 		}
 		
+		System.out.println(contactsFound.size());
 		if(contactsFound.size() != 0)
 		{
 			tripContacto(contactsFound);
 		}
 		else
 		{
-			System.out.println("**El contacto " + name + ", no existe :( **\n\n");
+			Message.warning("El contacto " + name + ", no existe");
 		}
-		
-		
+			
 	}
+	
 	public void searchContactForTelephone()
 	{
+		
+		Message.title("Buscar contacto por mediante su numero de teléfono"); 
+		
 		System.out.println("Ingrese el número de teléfono del contacto que desea buscar:");
 		String telephone = signInDataString();
 		ArrayList<Contacto> contactsFound = new ArrayList<Contacto>();
@@ -114,12 +118,15 @@ public class Agenda {
 		}
 		else
 		{
-			System.out.println("**El número de teléfono"+ telephone +" no existe:( **\n\n");
+			Message.warning("**El número de teléfono"+ telephone +" no existe");
 		}
 	}
 	
 	public void deleteContact()
 	{
+		
+		Message.title("Borrar contacto"); 
+		
 		if(_contacts.size() != 0)
 		{
 			System.out.println("Ingrese el nombre del contacto que desea borrar:");
@@ -143,36 +150,82 @@ public class Agenda {
 					index -= 1;
 					Contacto deletedContacts = contactsFound.get((index));
 					_contacts.remove(deletedContacts);
-					System.out.println("**El contacto "+ deletedContacts.getName() +", hacido borrado existosamente**");
+					
+					Message.success("El contacto "+ deletedContacts.getName() +", hacido borrado existosamente");
+					
 				}
 				else
 				{
-					System.out.println("**El identificador (ID) ingresado no es valido :(**");
+					Message.warning("El identificador (ID) ingresado no es valido");
 				}
-				
-				
 			}
 			else
 			{
-				System.out.println("**El contacto "+ name +", no existe:( **\n\n");
+				Message.warning("El contacto "+ name +", no existe");
 			}
-			
 		}
 		else
 		{
-			System.out.println("**No hay contacto para borrar  **\n\n");
+			Message.warning("No hay contacto para borrar");
 		}
-		
-		
-		
 	}
 	
-	public void setNumContact()
+	public void deleteTelephone()
 	{
+		Message.title("Borrar el teléfono de un contacto"); 
+		
+		System.out.println("Ingrese el nombre del contacto que desea borrar su télefono:");
+		String name = sc.next();
+		ArrayList<Contacto> contactsFound = new ArrayList<Contacto>();
+		
+		if(_contacts.size() != 0)
+			{
+			for (Contacto contact : _contacts)
+			{
+				if(contact.getName().equalsIgnoreCase(name))
+				{
+					contactsFound.add(contact);
+				}
+			}
+			
+			if(contactsFound.size() != 0)
+			{
+				tripContacto(contactsFound);
+				System.out.println("Seleccione el identificador (ID) del contacto a borrar");
+				int index = sc.nextInt();
+				if( index <= contactsFound.size() && index > 0 )
+				{
+					index -= 1;
+					Contacto deletedContacts = contactsFound.get((index));
+					int indexContact = _contacts.indexOf(deletedContacts);
+					_contacts.get(indexContact).setTelephone("vacio");
+					
+					Message.success("El teléfono del contacto "+ name +", hacido borrado");
+				}
+				else
+				{
+					Message.warning("El identificador (ID) ingresado no es valido");
+				}
+			}
+			else
+			{
+				Message.warning("El contacto "+ name +", no existe");
+			}
+		}
+		else
+		{
+			Message.warning("No hay contacto para realizar esta acción");
+		}
+	}
+	
+	public void modifyTelephoneContact()
+	{
+		Message.title("Modificar contacto"); 
+		
 		if(_contacts.size() != 0)
 		{
 			System.out.println("Ingrese el nombre del contacto que desea modificar:");
-			String name = signInDataString();
+			String name = sc.next();
 			ArrayList<Contacto> contactsFound = new ArrayList<Contacto>();
 			
 			for (Contacto contact : _contacts)
@@ -193,47 +246,44 @@ public class Agenda {
 					Contacto modifyContact = contactsFound.get((index));
 					int indexListContacts = _contacts.indexOf(modifyContact);
 					System.out.println("Ingrese el nuevo número de teléfono: ");
-					_contacts.get(indexListContacts).setTelephone(signInDataString());
-					System.out.println("**El contacto "+ modifyContact.getName() +", hacido modificado correctamente**");
+					String newTelephone = sc.next(); 
+					_contacts.get(indexListContacts).setTelephone(newTelephone);
+					
+					Message.success("El contacto "+ modifyContact.getName() +", hacido modificado correctamente");
+	
 				}
 				else
 				{
-					System.out.println("**El identificador (ID) ingresado no es valido :(**");
+					Message.warning("El identificador (ID) ingresado no es valido");
 				}
-				
-				
 			}
 			else
 			{
-				System.out.println("**El contacto "+ name +", no existe:( **\n\n");
+				Message.warning("El contacto "+ name +", no existe");
 			}
-			
 		}
 		else
 		{
-			System.out.println("**No hay contacto para modificar**\n\n");
+			Message.warning("No hay contacto para modificar");
 		}
 	}
 	
-    //methods extras 
-	
+	//resolver 
 	private String signInDataString()
 	{
-		String value = sc.next();
+		System.out.println();
+		String value = sc.nextLine();
 		System.out.println();
 		return value;
 	}
+	
 	
 	private void tripContacto( ArrayList<Contacto> arrayContacts)
 	{
 		for(int i = 0; i < arrayContacts.size(); i++)
 		{
-			System.out.println((i + 1) + " " +arrayContacts.get(i).getName() + " " + arrayContacts.get(i).getTelephone() + " " 
-					+ arrayContacts.get(i).getAdress() + " " + arrayContacts.get(i).getCodePostal());
+			System.out.println("Id: " + (i + 1) + "\n " +arrayContacts.get(i).toString());
 		}
 	}
-	
-	
-	
-	
+
 }

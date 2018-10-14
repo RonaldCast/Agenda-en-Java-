@@ -24,13 +24,20 @@ public class Agenda {
 			Contacto contact = new Contacto();
 			
 			System.out.print("Añadir nombre del contacto: ");
-			contact.setName( signInDataString());
+			contact.setName(signInDataString());
+			while(contact.getName().equals(""))
+			{
+				System.out.println("El nombre del contacto es obligatorio, por favor ingresarlo");
+				System.out.print("Añadir nombre del contacto: ");
+				contact.setName(signInDataString());
+			}
+			
 			System.out.print("Añadir Teléfono del contacto: ");
 			contact.setTelephone(signInDataString());
 			
 			while(contact.getTelephone().equals(""))
 			{
-				System.out.print("El número de teléfono es obligatorio, ingreselo por favor");
+				System.out.println("El número de teléfono es obligatorio, por favor ingresarlo");
 				System.out.print("Añadir Teléfono del contacto: ");
 				contact.setTelephone(signInDataString());
 				
@@ -48,7 +55,7 @@ public class Agenda {
 		}
 		else
 		{
-			Message.warning("Alert: Se le informa que su agenda ha llegado al máximo de contactos "+"("+_maximunContact+")");
+			Message.warning("Se le informa que su agenda ha llegado al máximo de contactos "+"("+_maximunContact+")");
 		}
 		
 	}
@@ -118,7 +125,7 @@ public class Agenda {
 		}
 		else
 		{
-			Message.warning("**El número de teléfono"+ telephone +" no existe");
+			Message.warning("**El número de teléfono "+ telephone +" no existe");
 		}
 	}
 	
@@ -130,7 +137,7 @@ public class Agenda {
 		if(_contacts.size() != 0)
 		{
 			System.out.println("Ingrese el nombre del contacto que desea borrar:");
-			String name = signInDataString();
+			String name = sc.next();
 			ArrayList<Contacto> contactsFound = new ArrayList<Contacto>();
 			
 			for (Contacto contact : _contacts)
@@ -143,7 +150,7 @@ public class Agenda {
 			if(contactsFound.size() != 0)
 			{
 				tripContacto(contactsFound);
-				System.out.println("Seleccione el identificador (ID) del contacto a borrar");
+				System.out.println("Seleccione el identificador (ID) del contacto a borrar:");
 				int index = sc.nextInt();
 				if( index <= contactsFound.size() && index > 0 )
 				{
